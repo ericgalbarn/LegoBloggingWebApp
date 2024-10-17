@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LEGO Adventures - Interactive 3D Landing Page</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Barlow+Semi+Condensed:300,400,600|Roboto:300,400,700"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="/asset/lego-browser-icon.svg" type="image/x-icon" />
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600&display=swap");
+
+      body {
+        font-family: "Roboto", sans-serif;
+        background: linear-gradient(135deg, #0d0d0d, #141414);
+        color: #fff;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+
+      .dark-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url("asset/wallpaper.jpg");
+        background-size: cover;
+        background-position: center;
+        filter: brightness(0.05);
+        z-index: -1;
+        transition: filter 0.3s ease;
+      }
+
+      .reveal-area {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+          circle at 50% 50%,
+          transparent 10%,
+          rgba(0, 0, 0, 0.95) 11%
+        );
+        pointer-events: none;
+        opacity: 1;
+        z-index: 0;
+      }
+
+      .content {
+        position: relative;
+        z-index: 1;
+      }
+
+      .hero-section {
+        position: relative;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+
+      .hero-content {
+        text-align: center;
+        z-index: 1;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 1.5s ease-out forwards;
+      }
+
+      @keyframes fadeInUp {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .hero-title {
+        font-size: 4rem;
+        font-weight: 700;
+        color: #00af4d;
+        text-shadow: 0 0 15px rgba(0, 175, 77, 0.8),
+          0 0 25px rgba(0, 175, 77, 0.8);
+        animation: glowTitle 3s ease-in-out infinite alternate;
+      }
+
+      @keyframes glowTitle {
+        from {
+          text-shadow: 0 0 10px rgba(0, 175, 77, 0.5),
+            0 0 15px rgba(0, 175, 77, 0.8);
+        }
+        to {
+          text-shadow: 0 0 20px rgba(0, 175, 77, 0.8),
+            0 0 30px rgba(0, 175, 77, 0.8);
+        }
+      }
+
+      .hero-content p {
+        font-size: 1.5rem;
+        margin-bottom: 2rem;
+        opacity: 0;
+        animation: glowingText 2s ease-in-out 0.5s forwards;
+      }
+
+      @keyframes glowingText {
+        0% {
+          opacity: 0;
+          text-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
+        }
+        50% {
+          opacity: 1;
+          text-shadow: 0 0 20px rgba(0, 175, 77, 0.9);
+        }
+        100% {
+          opacity: 1;
+          text-shadow: 0 0 5px rgba(0, 175, 77, 0.7);
+        }
+      }
+
+      .hero-content a {
+        display: inline-block;
+        padding: 15px 30px;
+        font-size: 1.2rem;
+        text-decoration: none;
+        color: #ffffff;
+        background-color: rgba(0, 175, 77, 0.2);
+        border: 2px solid #00af4d;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero-content a::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          120deg,
+          transparent,
+          rgba(0, 175, 77, 0.4),
+          transparent
+        );
+        transition: all 0.4s;
+      }
+
+      .hero-content a:hover::before {
+        left: 100%;
+      }
+
+      .hero-content a:hover {
+        background-color: rgba(0, 175, 77, 0.4);
+        box-shadow: 0 0 20px rgba(0, 175, 77, 0.6);
+        transform: scale(1.05);
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0) rotate(0deg);
+        }
+        50% {
+          transform: translateY(-20px) rotate(5deg);
+        }
+      }
+
+      .floating-brick {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        background-color: #00af4d;
+        border-radius: 8px;
+        opacity: 0.7;
+        animation: float 4s ease-in-out infinite;
+      }
+
+      .floating-brick:nth-child(2) {
+        top: 20%;
+        left: 20%;
+        background-color: #ffffff;
+        animation-delay: -2s;
+      }
+
+      .floating-brick:nth-child(3) {
+        top: 70%;
+        right: 25%;
+        background-color: #000000;
+        animation-delay: -1s;
+      }
+
+      .intro-line {
+        font-size: 3rem;
+        color: #00ff99;
+        text-shadow: 0 0 20px #00ff99, 0 0 30px #00ff99;
+      }
+
+      .intro-view {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #000;
+        opacity: 0;
+        visibility: hidden;
+        z-index: 1000;
+        transition: visibility 0s, opacity 0.5s ease-in-out;
+      }
+
+      .cta-button {
+        font-size: 1.2rem;
+        padding: 12px 24px;
+        border-radius: 50px;
+        color: #fff;
+        border: 2px solid #00ff99;
+        background-color: rgba(0, 255, 153, 0.2);
+        text-shadow: 0 0 10px rgba(0, 255, 153, 0.5);
+        transition: background-color 0.4s, box-shadow 0.4s, transform 0.4s;
+      }
+
+      .cta-button:hover {
+        background-color: rgba(0, 255, 153, 0.4);
+        box-shadow: 0 0 20px rgba(0, 255, 153, 0.6);
+        transform: scale(1.1);
+      }
+
+      @keyframes smokeFade {
+        from {
+          filter: blur(0px);
+          opacity: 1;
+        }
+        to {
+          filter: blur(10px);
+          opacity: 0;
+        }
+      }
+
+      .intro-view.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .intro-view.smoke-effect {
+        animation: smokeFade 1.5s forwards;
+      }
+
+      .content {
+        opacity: 0;
+        transition: opacity 1s;
+      }
+
+      /* Responsive design */
+      @media (max-width: 768px) {
+        .hero-title {
+          font-size: 3rem;
+        }
+
+        .hero-content p {
+          font-size: 1.2rem;
+        }
+
+        .hero-content a {
+          font-size: 1rem;
+          padding: 12px 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Intro Section with Separate Views for Each Line -->
+    <div id="intro-container">
+      <div class="intro-view" id="view-1">
+        <div class="intro-line">Hello everyone !</div>
+      </div>
+      <div class="intro-view" id="view-2">
+        <div class="intro-line">I am Rob Smith</div>
+      </div>
+      <div class="intro-view" id="view-3">
+        <div class="intro-line">Welcome to my blog !</div>
+      </div>
+      <div class="intro-view" id="view-4">
+        <div class="intro-line">Hope you enjoy reading my blog</div>
+      </div>
+      <div class="intro-view" id="view-5">
+        <div class="intro-line">Now, let's get started !</div>
+      </div>
+    </div>
+
+    <div class="dark-overlay"></div>
+    <div class="reveal-area"></div>
+    <div class="content">
+      <section class="hero-section">
+        <div class="hero-content">
+          <h1 id="lego-adventures" class="hero-title">LEGO Adventures</h1>
+          <p>Explore the world of LEGO like never before</p>
+          <a href="home.html" class="cta-button">Start Your Adventure</a>
+        </div>
+      </section>
+    </div>
+
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- Custom Animation Scripts -->
+    <script src="/js/introAnimation.js"></script>
+    <script src="/js/landingPageTorchAnimation.js"></script>
+  </body>
+</html>
