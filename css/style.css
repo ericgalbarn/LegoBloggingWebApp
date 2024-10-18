@@ -668,3 +668,14 @@ footer i:hover {
     transform: rotate(-180deg);
   }
 }
+
+.form-control.input {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+  .form-control.input {
+    width: 100%;
+  }
+}
